@@ -10,10 +10,6 @@ logging.basicConfig(
 
 init_logger: logging.Logger = logging.getLogger(__name__)
 
-installation_message: str = """
-By default `pip install obsei` will only install core dependencies.
-To install all required dependencies use `pip install obsei[all]`.
-Refer https://obsei.com/#install-obsei for more options.
-"""
+installation_message: str = """ Run the venv for all imports"""
 
 init_logger.warning(installation_message)
