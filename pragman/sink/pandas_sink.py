@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Optional
 
+import pandas as pd
 from pandas import DataFrame
 
 from pragman.payload import TextPayload
@@ -60,6 +61,12 @@ class PandasSink(BaseSink):
             responses.append(response)
 
         if config.dataframe is not None:
-            config.dataframe = config.dataframe.append(responses)
+            config.dataframe = pd.concat([config.dataframe,pd.DataFrame(responses)], ignore_index=True) # having some issues with the below append code new code
+            #config.dataframe = config.dataframe.append(responses)
+
+            # If i will use this append after method and then try to download the dataframe there will be some eror
+        
+        # # For testing purpose I am checking this DataFrame to csv file code remove this if not required
+        config.dataframe.to_csv('output.csv, index=False')
 
         return config.dataframe

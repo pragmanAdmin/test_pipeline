@@ -208,3 +208,4 @@ def datetime_handler(x: Any) -> Optional[Any]:
     elif isinstance(x, datetime):
         return x.isoformat()
     return vars(x) if hasattr(x, "__dict__") else x
+
