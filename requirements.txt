@@ -45,3 +45,10 @@ python-dotenv>=0.21.0
 feedparser
 httplib2
 google-auth-httplib2
+Googlenews
+APScheduler
+fastapi
+atlassian-python-api
+slackclient
+openai
+streamlit
