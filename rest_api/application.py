@@ -4,13 +4,12 @@ from typing import List
 
 from apscheduler.jobstores.base import JobLookupError
 from apscheduler.schedulers.base import BaseScheduler
-from fastapi import HTTPException
+from fastapi import FastAPI, HTTPException, Body
 
 from pragman.configuration import pragmanConfiguration
 from pragman.processor import Processor
 from pragman.analyzer.base_analyzer import BaseAnalyzerConfig, BaseAnalyzer
-from rest_api.api_request_response import ScheduleResponse, WorkflowAddResponse, ClassifierRequest, \
-    ClassifierResponse
+from rest_api.api_request_response import ScheduleResponse, WorkflowAddResponse, ClassifierRequest, ClassifierResponse
 from pragman.workflow.workflow import WorkflowConfig, Workflow
 from rest_api.global_utils import get_application, sink_map, source_map
 from rest_api.rate_limiter import RequestLimiter
@@ -26,9 +25,7 @@ analyzer: BaseAnalyzer
 processor: Processor
 rate_limiter: RequestLimiter
 
-
 app = get_application()
-
 
 def process_scheduled_job(workflow: Workflow):
     try:
@@ -41,7 +38,6 @@ def process_scheduled_job(workflow: Workflow):
     except Exception as ex:
         logger.error(f'Exception occur: {ex}')
 
-
 def schedule_workflows():
     workflows = workflow_store.get_all()
     jobs = []
@@ -49,15 +45,12 @@ def schedule_workflows():
         jobs.append(
             scheduler.add_job(
                 func=process_scheduled_job,
-                kwargs={
-                    "workflow": workflow
-                },
+                kwargs={"workflow": workflow},
                 trigger='interval',
                 seconds=workflow.config.time_in_seconds,
                 id=workflow.id,
             )
         )
-
 
 def scheduler_init():
     global scheduler
@@ -71,7 +64,6 @@ def scheduler_init():
         logger.error(f'Unable to Create Schedule Object, error: {ex.__cause__}')
         raise ex
 
-
 def logging_init():
     log_config = pragman_config.get_logging_config()
 
@@ -84,16 +76,13 @@ def logging_init():
     gunicorn_logger.setLevel(log_config["base_config"]["level"])
     gunicorn_logger.propagate = True
 
-
 def init_workflow_store():
     global workflow_store
     workflow_store = pragman_config.initialize_instance("workflow_store")
 
-
 def init_analyzer():
     global analyzer
     analyzer = pragman_config.initialize_instance("analyzer")
-
 
 def init_processor():
     global processor
@@ -101,11 +90,9 @@ def init_processor():
     # TODO generalize it, so based on analyzer config it initialise
     processor = Processor(analyzer=analyzer)
 
-
 def init_rate_limiter():
     global rate_limiter
     rate_limiter = pragman_config.initialize_instance("rate_limiter")
-
 
 def config_init() -> None:
     global pragman_config
@@ -113,7 +100,6 @@ def config_init() -> None:
         config_path=os.getenv('pragman_CONFIG_PATH', "../config"),
         config_filename=os.getenv('pragman_CONFIG_FILENAME', "rest.yaml")
     )
-
 
 @app.on_event("startup")
 def app_init():
@@ -126,7 +112,6 @@ def app_init():
     init_rate_limiter()
 
     logger.info("Open http://127.0.0.1:9898/redoc or http://127.0.0.1:9898/docs to see API Documentation.")
-
 
 @app.get(
     "/workflows/schedules/",
@@ -149,7 +134,6 @@ async def get_scheduled_syncs():
             )
         return schedules
 
-
 @app.get(
     "/workflows/",
     response_model=List[Workflow],
@@ -162,7 +146,6 @@ async def get_all_workflows():
     with rate_limiter.run():
         return workflow_store.get_all()
 
-
 @app.get(
     "/workflows/{workflow_id}",
     response_model=Workflow,
@@ -174,7 +157,6 @@ async def get_workflow(workflow_id: str):
     global workflow_store
     with rate_limiter.run():
         return workflow_store.get(workflow_id)
-
 
 @app.delete(
     "/workflows/{workflow_id}",
@@ -203,7 +185,6 @@ async def delete_workflow(workflow_id: str):
 
         return WorkflowAddResponse(id=workflow_id)
 
-
 @app.post(
     "/workflows/{workflow_id}",
     response_model=WorkflowAddResponse,
@@ -224,16 +205,13 @@ async def update_workflow(workflow_id: str, request: WorkflowConfig):
         workflow_store.update_workflow(workflow_detail)
         scheduler.add_job(
             func=process_scheduled_job,
-            kwargs={
-                "workflow": workflow_detail
-            },
+            kwargs={"workflow": workflow_detail},
             trigger='interval',
             seconds=workflow_detail.config.time_in_seconds,
             id=workflow_detail.id,
         )
 
         return WorkflowAddResponse(id=workflow_detail.id)
-
 
 @app.post(
     "/workflows/",
@@ -250,16 +228,13 @@ async def add_workflow(request: WorkflowConfig):
         workflow_store.add_workflow(workflow_detail)
         scheduler.add_job(
             func=process_scheduled_job,
-            kwargs={
-                "workflow": workflow_detail
-            },
+            kwargs={"workflow": workflow_detail},
             trigger='interval',
             seconds=workflow_detail.config.time_in_seconds,
             id=workflow_detail.id,
         )
 
         return WorkflowAddResponse(id=workflow_detail.id)
-
 
 @app.post(
     "/classifier",
@@ -289,6 +264,42 @@ def classify_texts(request: ClassifierRequest):
 
         return ClassifierResponse(data=response)
 
+@app.post(
+    "/create_report",
+    response_model=WorkflowAddResponse,
+    response_model_exclude_unset=True,
+    tags=["report"]
+)
+async def create_report(
+    source: str = Body(...),
+    analyzer: str = Body(...),
+    sink: str = Body(...),
+    config: dict = Body(...)
+):
+    global rate_limiter
+    global workflow_store
+    global scheduler
+    with rate_limiter.run():
+        # Create a new WorkflowConfig based on the provided configurations
+        workflow_config = WorkflowConfig(
+            source_config={"TYPE": source, **config['source']},
+            analyzer_config={"TYPE": analyzer, **config['analyzer']},
+            sink_config={"TYPE": sink, **config['sink']},
+            time_in_seconds=3600  # Example value, adjust as needed
+        )
+        
+        workflow_detail = Workflow(config=workflow_config)
+        workflow_store.add_workflow(workflow_detail)
+        
+        scheduler.add_job(
+            func=process_scheduled_job,
+            kwargs={"workflow": workflow_detail},
+            trigger='interval',
+            seconds=workflow_detail.config.time_in_seconds,
+            id=workflow_detail.id,
+        )
+        
+        return WorkflowAddResponse(id=workflow_detail.id)
 
 if __name__ == "__main__":
     import uvicorn

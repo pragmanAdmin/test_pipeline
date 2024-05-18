@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Report</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-TN/L8+BC+0oJ+djPSUQz+PEE9VH+8tGm8vSzFpsEK/BWB9zfyWu8TpJweElZiBR7jZykK6FNbGtLkH62x+w8Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://kit.fontawesome.com/7485207748.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="profile-pic"></div>
+            <ul class="menu">
+                <li class="menu-item active">Reports</li>
+                <li class="menu-item">Events</li>
+                <li class="menu-item">People</li>
+                <li class="menu-item">Audiences</li>
+            </ul>
+        </div>
+        <div class="sidebar-bottom">
+            <div class="menu-item">Demo mode</div>
+            <div class="menu-item">Invite team</div>
+            <div class="menu-item">Feedback</div>
+            <div class="menu-item">Help and docs</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Create a new report</h1>
+        <div class="form">
+            <div class="step">
+                <h2>Step 1: Select Observer</h2>
+                <input type="text" placeholder="Search for a source">
+                <div class="sources">
+                    <button class="source" data-source="twitter_source" data-target="twitter_sourceConfig"><i class="fab fa-twitter"></i></button>
+                    <button class="source" data-source="appstore_scrapper" data-target="appstore_scrapperConfig"><i class="fab fa-app-store-ios"></i></button>
+                    <button class="source" data-source="base_source"><i class="fas fa-baseball-ball"></i></button>
+                    <button class="source" data-source="email_source" data-target="email_sourceConfig"><i class="fas fa-envelope"></i></button>
+                    <button class="source" data-source="facebook_source" data-target="facebook_sourceConfig"><i class="fab fa-facebook"></i></button>
+                    <button class="source" data-source="google_maps_reviews" data-target="google_maps_reviewsConfig"><i class="fas fa-map-marked-alt"></i></button>
+                    <button class="source" data-source="google_news_source" data-target="google_news_sourceConfig"><i class="far fa-newspaper"></i></button>
+                    <button class="source" data-source="pandas_source"><i class="fas fa-file-excel"></i></button>
+                    <button class="source" data-source="playstore_reviews" data-target="playstore_reviewsConfig"><i class="fas fa-play"></i></button>
+                    <button class="source" data-source="playstore_scrapper"><i class="fas fa-play"></i></button>
+                    <button class="source" data-source="reddit_scrapper" data-target="reddit_scrapperConfig"><i class="fab fa-reddit"></i></button>
+                    <button class="source" data-source="reddit_source" data-target="reddit_sourceConfig"><i class="fab fa-reddit"></i></button>
+                    <button class="source" data-source="website_crawler_source" data-target="website_crawler_sourceConfig"><i class="fas fa-globe"></i></button>
+                    <button class="source" data-source="youtube_reviews"><i class="fab fa-youtube"></i></button>
+                    <button class="source" data-source="youtube_scrapper" data-target="youtube_scrapperConfig"><i class="fab fa-youtube"></i></button>
+                </div>
+                <div id="configObserver">
+                    <!-- Appstore -->
+                    <div id="appstore_scrapperConfig" style="display: none;">
+                        <label for="appUrl">App URL:</label>
+                        <input type="text" id="appUrl">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                        <label for="maxCount">Max Count:</label>
+                        <input type="number" id="maxCount">
+                    </div>
+
+                    <!-- Playstore -->
+                    <div id="playstore_reviewsConfig" style="display: none;">
+                        <label for="appUrl">App URL:</label>
+                        <input type="text" id="appUrl">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                        <label for="maxCount">Max Count:</label>
+                        <input type="number" id="maxCount">
+                    </div>
+
+                    <!-- Maps Reviews -->
+                    <div id="google_maps_reviewsConfig" style="display: none;">
+                        <label for="apiKey">API Key:</label>
+                        <input type="text" id="apiKey">
+                        <label for="queries">Queries:</label>
+                        <input type="text" id="queries">
+                        <label for="numberOfReview">Number of Reviews:</label>
+                        <input type="number" id="numberOfReview">
+                    </div>
+
+                    <!-- Reddit Scrapper -->
+                    <div id="reddit_scrapperConfig" style="display: none;">
+                        <label for="url">URL:</label>
+                        <input type="text" id="url">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                    </div>
+
+                    <!-- Twitter -->
+                    <div id="twitter_sourceConfig" style="display: none;">
+                        <label for="query">Query:</label>
+                        <input type="text" id="query">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                        <label for="maxTweets">Max Tweets:</label>
+                        <input type="number" id="maxTweets">
+                        <label for="consumerKey">Consumer Key:</label>
+                        <input type="text" id="consumerKey">
+                        <label for="consumerSecret">Consumer Secret:</label>
+                        <input type="text" id="consumerSecret">
+                    </div>
+
+                    <!-- Facebook -->
+                    <div id="facebook_sourceConfig" style="display: none;">
+                        <label for="pageId">Page ID:</label>
+                        <input type="text" id="pageId">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                        <label for="appId">App ID:</label>
+                        <input type="text" id="appId">
+                        <label for="appSecret">App Secret:</label>
+                        <input type="text" id="appSecret">
+                        <label for="longTermToken">Long Term Token:</label>
+                        <input type="text" id="longTermToken">
+                    </div>
+
+                    <!-- Mail -->
+                    <div id="email_sourceConfig" style="display: none;">
+                        <label for="imapServer">IMAP Server:</label>
+                        <input type="text" id="imapServer">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                    </div>
+
+                    <!-- Reddit -->
+                    <div id="reddit_sourceConfig" style="display: none;">
+                        <label for="subreddits">Subreddits:</label>
+                        <input type="text" id="subreddits">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                    </div>
+
+                    <!-- Google News -->
+                    <div id="google_news_sourceConfig" style="display: none;">
+                        <label for="query">Query:</label>
+                        <input type="text" id="query">
+                        <label for="maxResult">Max Result:</label>
+                        <input type="number" id="maxResult">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                        <label for="fetchArticle">Fetch Article:</label>
+                        <select id="fetchArticle">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+
+                    <!-- Web Crawler -->
+                    <div id="website_crawler_sourceConfig" style="display: none;">
+                        <label for="urls">URLs:</label>
+                        <input type="text" id="urls">
+                    </div>
+
+                    <!-- Video Scraper -->
+                    <div id="youtube_scrapperConfig" style="display: none;">
+                        <label for="videoUrl">Video URL:</label>
+                        <input type="text" id="videoUrl">
+                        <label for="lookupPeriod">Lookup Period:</label>
+                        <input type="number" id="lookupPeriod">
+                        <label for="maxComment">Max Comment:</label>
+                        <input type="number" id="maxComment">
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <h2>Step 2: Analyzer</h2>
+                <div class="analyzers">
+                    <div class="analyzer" data-analyzer="base_analyzer">Base Analyzer</div>
+                    <div class="analyzer" data-analyzer="classification_analyzer">Classification Analyzer</div>
+                    <div class="analyzer" data-analyzer="dummy_analyzer">Dummy Analyzer</div>
+                    <div class="analyzer" data-analyzer="ner_analyzer">NER Analyzer</div>
+                    <div class="analyzer" data-analyzer="pii_analyzer">PII Analyzer</div>
+                    <div class="analyzer" data-analyzer="sentiment_analyzer">Sentiment Analyzer</div>
+                    <div class="analyzer" data-analyzer="translation_analyzer">Translation Analyzer</div>
+                    <div class="analyzer" data-analyzer="mentions_analyzer">Mentions Analyzer</div>
+                    <div class="analyzer" data-analyzer="trends_analyzer">Trends Analyzer</div>
+                    <div class="analyzer" data-analyzer="influencers_analyzer">Influencers Analyzer</div>
+                    <div class="analyzer" data-analyzer="engagement_analyzer">Engagement Analyzer</div>
+                    <div class="analyzer" data-analyzer="mentions_analyzer">Mentions</div>
+                    <div class="analyzer" data-analyzer="trends_analyzer">Trends</div>
+                    <div class="analyzer" data-analyzer="influencers_analyzer">Influencers</div>
+                    <div class="analyzer" data-analyzer="engagement_analyzer">Engagement</div>
+                </div>
+                <div id="classification_analyzer" style="display: none;">
+                    <label for="classification_labels">Labels:</label>
+                    <input type="text" id="classification_labels">
+                    <label for="classification_multi_class">Multi-class Classification:</label>
+                    <select id="classification_multi_class">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label for="classification_model">Model Name/Path:</label>
+                    <input type="text" id="classification_model">
+                    <select id="device">
+                        <option value="cpu">CPU</option>
+                        <option value="gpu">GPU</option>
+                        <option value="auto">Auto</option>
+                    </select>
+                </div>
+                <div id="sentiment_analyzer" style="display: none;">
+                    <label for="sentiment_labels">Labels:</label>
+                    <input type="text" id="sentiment_labels">
+                    <label for="sentiment_multi_class">Multi-class Classification:</label>
+                    <select id="sentiment_multi_class">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label for="sentiment_model">Model Name/Path:</label>
+                    <input type="text" id="sentiment_model">
+                    <select id="device">
+                        <option value="cpu">CPU</option>
+                        <option value="gpu">GPU</option>
+                        <option value="auto">Auto</option>
+                    </select>
+                </div>
+                <div id="pii_analyzer" style="display: none;">
+                    <label for="pii_analyze_only">Analyze Only:</label>
+                    <select id="pii_analyze_only">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label for="pii_return_decision">Return Decision Process:</label>
+                    <select id="pii_return_decision">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label for="pii_nlp_engine">NLP Engine Name:</label>
+                    <input type="text" id="pii_nlp_engine">
+                    <label for="pii_model_name">Model Name:</label>
+                    <input type="text" id="pii_model_name">
+                    <label for="pii_lang_code">Language Code:</label>
+                    <input type="text" id="pii_lang_code">
+                    <select id="device">
+                        <option value="cpu">CPU</option>
+                        <option value="gpu">GPU</option>
+                        <option value="auto">Auto</option>
+                    </select>
+                </div>
+                <div id="dummy_analyzer" style="display: none;"></div>
+                <div id="ner_analyzer" style="display: none;"></div>
+                <div id="translation_analyzer" style="display: none;"></div>
+            </div>
+            <div class='step'>
+                <h2>Step 3: OutputLink</h2>
+                <div class='sinks'>
+                    <div class="sink" data-sink="base_sink">Base Sink</div>
+                    <div class="sink" data-sink="dailyget_sink">Dailyget Sink</div>
+                    <div class="sink" data-sink="elasticsearch_sink">Elasticsearch Sink</div>
+                    <div class="sink" data-sink="http_sink">HTTP Sink</div>
+                    <div class="sink" data-sink="jira_sink">JIRA Sink</div>
+                    <div class="sink" data-sink="logger_sink">Logger Sink</div>
+                    <div class="sink" data-sink="pandas_sink">Pandas Sink</div>
+                    <div class="sink" data-sink="slack_sink">Slack Sink</div>
+                    <div class="sink" data-sink="zendesk_sink">Zendesk Sink</div>
+                </div>
+                <div id="zendesk_sink" style="display: none;">
+                    <label for="domain">Domain:</label>
+                    <input type="text" id="domain">
+                    <label for="subdomain">Subdomain:</label>
+                    <input type="text" id="subdomain">
+                    <label for="emailSource">Email Source:</label>
+                    <input type="email" id="emailSource">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password">
+                </div>
+                <div id="jira_sink" style="display: none;">
+                    <label for="jira_url">URL:</label>
+                    <input type="text" id="jira_url">
+                    <label for="jira_username">Username:</label>
+                    <input type="text" id="jira_username">
+                    <label for="jira_password">Password:</label>
+                    <input type="password" id="jira_password">
+                    <label for="jira_issue_type">Issue Type Name:</label>
+                    <input type="text" id="jira_issue_type">
+                    <label for="jira_project_key">Project Key:</label>
+                    <input type="text" id="jira_project_key">
+                </div>
+                <div id="slack_sink" style="display: none;">
+                    <label for="slack_token">Slack Token:</label>
+                    <input type="text" id="slack_token">
+                    <label for="slack_channel_id">Channel ID:</label>
+                    <input type="text" id="slack_channel_id">
+                    <label for="slack_jinja_template">Jinja Template:</label>
+                    <textarea id="slack_jinja_template">:bell: Hi there!, a new notification by *Obsei*>Content:```  {%- for key, value in payload.items() recursive%}    {%- if value is mapping -%}      {{loop(value.items())}}    {%- else %}      {{key}}: {{value}}    {%- endif %}  {%- endfor%}```</textarea>
+                </div>
+                <div id="elasticsearch_sink" style="display: none;">
+                    <label for="elastic_host">Host:</label>
+                    <input type="text" id="elastic_host">
+                    <label for="elastic_port">Port:</label>
+                    <input type="text" id="elastic_port">
+                    <label for="elastic_index_name">Index Name:</label>
+                    <input type="text" id="elastic_index_name">
+                </div>
+                <div id="http_sink" style="display: none;">
+                    <label for="http_url">URL:</label>
+                    <input type="text" id="http_url">
+                    <label for="http_content_type">Header Content-Type:</label>
+                    <input type="text" id="http_content_type">
+                </div>
+            </div>
+            <div class="step">
+                <h2>Step 3: Generate Report</h2>
+                <div class="report">
+                    <label for="title">Report Title:</label>
+                    <input type="text" id="title">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description">
+                    <label for="tag">Tag:</label>
+                    <input type="text" id="tag">
+                </div>
+            </div>
+            <div class="submit">
+                <button type="button" id="backBtn">Back</button>
+                <button type="submit" id="nextBtn">Next</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
