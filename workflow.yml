@@ -1,35 +1,35 @@
-analyzer:
-  _target_: pragman.analyzer.classification_analyzer.ZeroShotClassificationAnalyzer
-  device: auto
-  model_name_or_path: typeform/mobilebert-uncased-mnli
-analyzer_config:
-  _target_: pragman.analyzer.classification_analyzer.ClassificationAnalyzerConfig
-  labels:
-  - petrol
-  - clean energy
-  - pricy
-  - positive outlook
-  - negative outlook
-  multi_class_classification: true
-  use_splitter_and_aggregator: true
-  splitter_config:
-    _target_: pragman.preprocessor.text_splitter.TextSplitterConfig
-    max_split_length: 300
-    split_stride: 10
-  aggregator_config:
-    _target_: pragman.postprocessor.inference_aggregator.InferenceAggregatorConfig
-    aggregate_function:
-      _target_: pragman.postprocessor.inference_aggregator_function.ClassificationAverageScore
-      score_threshold: 0.4
-sink:
-  _target_: pragman.sink.pandas_sink.PandasSink
-sink_config:
-  _target_: pragman.sink.pandas_sink.PandasSinkConfig
-source:
-  _target_: pragman.source.google_news_source.GoogleNewsSource
-source_config:
-  _target_: pragman.source.google_news_source.GoogleNewsConfig
-  fetch_article: true
-  lookup_period: 1d
-  max_results: '3'
-  query: ola electric
+# analyzer:
+#   _target_: pragman.analyzer.classification_analyzer.ZeroShotClassificationAnalyzer
+#   device: auto
+#   model_name_or_path: typeform/mobilebert-uncased-mnli
+# analyzer_config:
+#   _target_: pragman.analyzer.classification_analyzer.ClassificationAnalyzerConfig
+#   labels:
+#   - petrol
+#   - clean energy
+#   - pricy
+#   - positive outlook
+#   - negative outlook
+#   multi_class_classification: true
+#   use_splitter_and_aggregator: true
+#   splitter_config:
+#     _target_: pragman.preprocessor.text_splitter.TextSplitterConfig
+#     max_split_length: 300
+#     split_stride: 10
+#   aggregator_config:
+#     _target_: pragman.postprocessor.inference_aggregator.InferenceAggregatorConfig
+#     aggregate_function:
+#       _target_: pragman.postprocessor.inference_aggregator_function.ClassificationAverageScore
+#       score_threshold: 0.4
+# sink:
+#   _target_: pragman.sink.pandas_sink.PandasSink
+# sink_config:
+#   _target_: pragman.sink.pandas_sink.PandasSinkConfig
+# source:
+#   _target_: pragman.source.google_news_source.GoogleNewsSource
+# source_config:
+#   _target_: pragman.source.google_news_source.GoogleNewsConfig
+#   fetch_article: true
+#   lookup_period: 1d
+#   max_results: '3'
+#   query: ola electric
